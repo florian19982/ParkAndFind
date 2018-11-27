@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
                 // TODO Write Location in File
             } catch(ex: SecurityException) {
-                label.setText("Error")
+                label.setText(R.string.error)
                 Log.d("myTag", "Security Exception, no location available")
             }
         }

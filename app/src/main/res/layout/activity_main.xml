@@ -10,7 +10,7 @@
     <Button
             android:layout_width="270dp"
             android:layout_height="167dp"
-            android:text="Parken"
+            android:text="@string/park"
             android:id="@+id/park"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -31,7 +31,7 @@
     <Button
             android:layout_width="270dp"
             android:layout_height="167dp"
-            android:text="Finden"
+            android:text="@string/find"
             android:id="@+id/find"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
