@@ -1,64 +1,73 @@
 package de.flboehm.parkandfind
 
+import android.content.Context
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import java.io.File
+import java.io.IOException
+import java.io.PrintWriter
 
 class MainActivity : AppCompatActivity() {
 
-    private var locationManager : LocationManager? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Create persistent LocationManager reference
-        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Get the widgets
         val parkButton = findViewById<Button>(R.id.park)
         val findButton = findViewById<Button>(R.id.find)
         val label = findViewById<TextView>(R.id.label)
 
-        var longitude : Double
-        var latitude : Double
-
-        //define the listener
-        val locationListener: LocationListener = object : LocationListener {
-            override fun onLocationChanged(location: Location) {
-                label.setText("" + location.longitude + ":" + location.latitude)
-                longitude = location.longitude
-                latitude = location.latitude
-            }
-            override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-            override fun onProviderEnabled(provider: String) {}
-            override fun onProviderDisabled(provider: String) {}
-        }
-
-        // Set a click listener for button widget
         parkButton.setOnClickListener{
-            try {
-                // Request location updates
-                locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
-                // TODO Write Location in File
-            } catch(ex: SecurityException) {
-                label.setText(R.string.error)
-                Log.d("myTag", "Security Exception, no location available")
-            }
+            label.text = getString(R.string.park)
+            // TODO Get and store last known location
         }
 
         findButton.setOnClickListener {
-            // TODO Open Maps View with Loacation
+            label.text = getString(R.string.find)
+            // TODO Open Maps View with location
         }
 
+    }
 
+    fun storeLocation(location: Location) {
+        val path = getDir("ParkAndFind", Context.MODE_PRIVATE)
+        var success = true
+        if (!path.exists()) {
+            success = path.mkdir()
+        }
+        if (success) {
+            val fileLong = File("longitude.txt")
+            val fileLat = File("latitude.txt")
+            if (!fileLong.exists()) {
+                success = fileLong.mkdir()
+            }
+            if (success && !fileLat.exists()) {
+                success = fileLat.mkdir()
+            }
+            if (success) {
+                // directory exists or already created
+                try {
+                    PrintWriter(fileLong).use { out -> out.print(location.longitude) }
+                    PrintWriter(fileLat).use { out -> out.print(location.latitude) }
+                } catch (e: IOException) {
+                    // handle the exception
+                }
 
+            } else {
+                // directory creation is not successful
+            }
+        }
     }
 
 
