@@ -1,7 +1,7 @@
 # ParkAndFind
 A tiny, simple app to find your car.  
 
-:warning: Currently on development!  
+:warning: Development moved to Codeberg e.V: https://codeberg.org/florian98/ParkAndFind  
 
 ## What is ParkAndFind? :parking:
 There are many apps to save the location of your car to find it later.  
